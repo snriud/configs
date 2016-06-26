@@ -1,0 +1,74 @@
+" General
+" =======
+set history=1000    " History
+filetype on         " Auto detech filetype
+filetype indent on  " Auto indent
+
+set nocompatible    " No compatible mode
+set autoread        " Auto read file modifies
+"set paste           " Keep format while paste
+
+set encoding=utf8   " Encoding utf8
+
+" Misc
+" ====
+set background=dark
+syntax on
+set showmode  
+set colorcolumn=80      " Specific a breakline column
+set cursorline " hightlight cursorline
+set cursorcolumn
+set number     " show linenumber
+set linespace=0" No extra spaces between rows
+set hlsearch   " Hightlight search terms
+set incsearch  " Find as you type search
+set smartcase
+set ignorecase
+
+" Formatting
+" ==========
+"set nowrap          " No auto break line
+set autoindent      " Auto indent
+
+set shiftwidth=4     
+set expandtab
+set tabstop=4
+set softtabstop=4
+
+set nojoinspaces
+set splitright
+set splitbelow
+set showmatch       " Show match
+set matchtime=1     " Matchtime 100ms
+set mat=2
+
+"set foldenable      " Fold code
+"set foldmethod=syntax
+"set foldcolumn=1
+
+" Status
+" ======
+set ruler
+set showcmd
+set so=8            " When scroll line, keep 7 lines
+set cmdheight=1
+
+" Color and Syntax
+" ================
+syntax enable
+syntax on
+
+" Plugins
+" =======
+execute pathogen#infect()
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let g:autoclose_vim_commentmode = 1
+
+" Key Mapping
+" ===========
+map <C-j> <C-W>j
+map <C-h> <C-W>h
+map <C-k> <C-W>k
+map <C-l> <C-W>l
+map 0 ^
+map <C-n> :NERDTreeToggle<CR>
