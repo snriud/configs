@@ -1,0 +1,22 @@
+# Docker commands
+
+alias dil='docker image ls'
+alias dir='docker image rm'
+alias dip='docker image prune'
+
+alias dcl='docker container ls'
+alias dcs='docker container stop'
+alias dcr='docker container rm'
+alias dcp='docker container prune'
+
+alias de='docker exec -it'
+alias dl='docker logs'
+alias di='docker inspect'
+alias dii='docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
+
+# Git commands
+
+alias gs='git status'
+alias ga='git add'
+alias gcm='git commit -m'
+alias gck='git checkout'
