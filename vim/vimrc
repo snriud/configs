@@ -3,6 +3,7 @@
 set history=1000    " History
 filetype on         " Auto detech filetype
 filetype indent on  " Auto indent
+filetype plugin on  " vim-go
 
 set nocompatible    " No compatible mode
 set autoread        " Auto read file modifies
