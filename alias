@@ -1,5 +1,4 @@
 # Docker commands
-
 alias dil='docker image ls'
 alias dir='docker image rm'
 alias dip='docker image prune'
@@ -17,8 +16,10 @@ alias dii='docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{
 # Git commands
 
 alias gs='git status'
+alias gd='git diff'
 alias ga='git add'
-alias gcm='git commit -m'
-alias gck='git checkout'
-alias gpo='git push origin'
-alias glo='git pull origin'
+alias gt='git commit -m '
+alias gp='git push origin'
+alias gl='git log --graph --pretty=oneline'
+alias gc='git checkout'
+alias gb='git -P branch'
