@@ -15,12 +15,12 @@ set encoding=utf8   " Encoding utf8
 " ====
 set background=dark
 syntax on
-set showmode  
-set colorcolumn=80      " Specific a breakline column
+set showmode
+" set colorcolumn=80      " Specific a breakline column
 set cursorline " hightlight cursorline
 set cursorcolumn
 set number     " show linenumber
-set linespace=0" No extra spaces between rows
+set linespace=0 " No extra spaces between rows
 set hlsearch   " Hightlight search terms
 set incsearch  " Find as you type search
 set smartcase
@@ -31,7 +31,7 @@ set ignorecase
 "set nowrap          " No auto break line
 set autoindent      " Auto indent
 
-set shiftwidth=4     
+set shiftwidth=4
 set expandtab
 set tabstop=4
 set softtabstop=4
@@ -88,7 +88,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 
 " 代码自动完成，安装完插件还需要额外配置才可以使用
-Plug 'Valloric/YouCompleteMe'
+" use COC instead, COC is better than YouCompleteMe
+"Plug 'Valloric/YouCompleteMe'
 
 " 可以在文档中显示 git 信息
 Plug 'airblade/vim-gitgutter'
@@ -103,15 +104,17 @@ Plug 'airblade/vim-gitgutter'
 " 可以在 vim 中自动完成
 " Plug 'Shougo/neocomplete.vim'
 
-
 " 配色方案
 " colorscheme neodark
 Plug 'KeitaNakamura/neodark.vim'
+
 " colorscheme monokai
 Plug 'crusoexia/vim-monokai'
-" colorscheme github 
+
+" colorscheme github
 Plug 'acarapetis/vim-colors-github'
-" colorscheme one 
+
+" colorscheme one
 Plug 'rakr/vim-one'
 
 " go 主要插件
@@ -119,6 +122,12 @@ Plug 'fatih/vim-go', { 'tag': '*' }
 
 " go 中的代码追踪，输入 gd 就可以自动跳转
 Plug 'dgryski/vim-godef'
+
+" go struct split and join
+Plug 'AndrewRadev/splitjoin.vim'
+
+" go live code
+Plug 'SirVer/ultisnips'
 
 " git 信息
 Plug 'tpope/vim-fugitive'
@@ -129,20 +138,21 @@ Plug 'ctrlpvim/ctrlp.vim'
 " Rust
 Plug 'rust-lang/rust.vim'
 
+" COC
+" use rustup component add rust-analyzer to install rust-analyzer
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" ale
+"Plug 'dense-analysis/ale'
+
+" Rust Analyzer
+" Plug 'prabirshrestha/vim-lsp'
+
 " JSON format
 Plug 'xadillax/json-formatter.vim'
 
 " markdown preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-
-" go struct split and join
-Plug 'AndrewRadev/splitjoin.vim'
-
-" go live code
-Plug 'SirVer/ultisnips'
-
-" molokai theme
-Plug 'fatih/molokai'
 
 " 插件结束的位置，插件全部放在此行上面
 call plug#end()
@@ -152,12 +162,11 @@ call plug#end()
 
 " 开启24bit的颜色，开启这个颜色会更漂亮一些
 set termguicolors
-" 配色方案, 可以从上面插件安装中的选择一个使用 
+" 配色方案, 可以从上面插件安装中的选择一个使用
 colorscheme one " 主题
 " colorscheme github " 主题
 " colorscheme monokai " 主题
 " colorscheme neodark " 主题
-" colorscheme molokai
 set background=dark " 主题背景 dark-深色; light-浅色
 
 " vim-go
@@ -218,9 +227,9 @@ let g:tagbar_type_go = {
 " =============
 
 " make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
+"let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
+"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+"let g:SuperTabDefaultCompletionType = '<C-n>'
 
 " better key bindings for UltiSnipsExpandTrigger
 let g:UltiSnipsExpandTrigger = "<tab>"
@@ -260,8 +269,61 @@ let NERDTreeShowBookmarks=2
 " 在终端启动vim时，共享NERDTree
 let g:nerdtree_tabs_open_on_console_startup=1
 
+" go test timeout
+let g:go_test_timeout = '3600s'
+
 " same identifiers highlight
 " let g:go_auto_sameids = 1
+
+" ALE
+" ===
+
+let g:ale_pattern_options = {
+\   '.*\.go$': {'ale_enabled': 0},
+\}
+
+" Rust
+" =============
+let g:rustfmt_autosave = 1
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+
+" coc
+" ============
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+inoremap <silent><expr> <c-@> coc#refresh()
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " Key Mapping
 " ===========
@@ -272,8 +334,3 @@ map <C-l> <C-W>l
 map 0 ^
 map <C-n> :NERDTreeToggle<CR>
 map <C-i> :GoDecls<CR>
-
-autocmd FileType go nmap <Leader>i <Plug>(go-info)
-nnoremap <Leader>n :cnext<CR>
-nnoremap <Leader>m :cprevious<CR>
-nnoremap <Leader>c :cclose<CR>
