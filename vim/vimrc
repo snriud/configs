@@ -11,6 +11,8 @@ set autoread        " Auto read file modifies
 
 set encoding=utf8   " Encoding utf8
 
+set updatetime=300  " updatetime
+
 " Misc
 " ====
 set background=dark
@@ -118,16 +120,16 @@ Plug 'acarapetis/vim-colors-github'
 Plug 'rakr/vim-one'
 
 " go 主要插件
-Plug 'fatih/vim-go', { 'tag': '*' }
+" Plug 'fatih/vim-go', { 'tag': '*' }
 
 " go 中的代码追踪，输入 gd 就可以自动跳转
-Plug 'dgryski/vim-godef'
+"Plug 'dgryski/vim-godef'
 
 " go struct split and join
-Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'AndrewRadev/splitjoin.vim'
 
 " go live code
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 
 " git 信息
 Plug 'tpope/vim-fugitive'
@@ -136,7 +138,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'ctrlpvim/ctrlp.vim'
 
 " Rust
-Plug 'rust-lang/rust.vim'
+" Plug 'rust-lang/rust.vim'
 
 " COC
 " use rustup component add rust-analyzer to install rust-analyzer
@@ -152,7 +154,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'xadillax/json-formatter.vim'
 
 " markdown preview
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
+" codeium copilot
+Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 
 " 插件结束的位置，插件全部放在此行上面
 call plug#end()
@@ -168,27 +173,6 @@ colorscheme one " 主题
 " colorscheme monokai " 主题
 " colorscheme neodark " 主题
 set background=dark " 主题背景 dark-深色; light-浅色
-
-" vim-go
-" =======
-
-let g:go_fmt_command = "goimports" " 格式化将默认的 gofmt 替换
-let g:go_autodetect_gopath = 1
-let g:go_list_type = "quickfix"
-
-let g:go_version_warning = 1
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_generate_tags = 1
-
-let g:godef_split=2
-
-set completeopt-=preview
 
 " tagbar plugin
 " =============
@@ -221,6 +205,41 @@ let g:tagbar_type_go = {
     \ },
     \ 'ctagsbin'  : 'gotags',
     \ 'ctagsargs' : '-sort -silent'
+\ }
+
+let g:rust_use_custom_ctags_defs = 1
+let g:tagbar_type_rust = {
+  \ 'ctagsbin' : '/usr/local/bin/ctags',
+  \ 'ctagstype' : 'rust',
+  \ 'kinds' : [
+      \ 'n:modules',
+      \ 's:structures:1',
+      \ 'i:interfaces',
+      \ 'c:implementations',
+      \ 'f:functions:1',
+      \ 'g:enumerations:1',
+      \ 't:type aliases:1:0',
+      \ 'v:constants:1:0',
+      \ 'M:macros:1',
+      \ 'm:fields:1:0',
+      \ 'e:enum variants:1:0',
+      \ 'P:methods:1',
+  \ ],
+  \ 'sro': '::',
+  \ 'kind2scope' : {
+      \ 'n': 'module',
+      \ 's': 'struct',
+      \ 'i': 'interface',
+      \ 'c': 'implementation',
+      \ 'f': 'function',
+      \ 'g': 'enum',
+      \ 't': 'typedef',
+      \ 'v': 'variable',
+      \ 'M': 'macro',
+      \ 'm': 'field',
+      \ 'e': 'enumerator',
+      \ 'P': 'method',
+  \ },
 \ }
 
 " youCompleteMe
@@ -270,7 +289,7 @@ let NERDTreeShowBookmarks=2
 let g:nerdtree_tabs_open_on_console_startup=1
 
 " go test timeout
-let g:go_test_timeout = '3600s'
+" let g:go_test_timeout = '3600s'
 
 " same identifiers highlight
 " let g:go_auto_sameids = 1
@@ -278,15 +297,25 @@ let g:go_test_timeout = '3600s'
 " ALE
 " ===
 
-let g:ale_pattern_options = {
-\   '.*\.go$': {'ale_enabled': 0},
-\}
+"let g:ale_pattern_options = {
+"\   '.*\.go$': {'ale_enabled': 0},
+"\}
 
 " Rust
 " =============
 let g:rustfmt_autosave = 1
 let g:rustfmt_emit_files = 1
 let g:rustfmt_fail_silently = 0
+
+" rust analyzer plugin
+" ====================
+if executable('rust-analyzer')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'Rust Language Server',
+        \ 'cmd': {server_info->['rust-analyzer']},
+        \ 'whitelist': ['rust']
+        \ })
+endif
 
 " coc
 " ============
@@ -318,12 +347,48 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-inoremap <silent><expr> <c-@> coc#refresh()
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-nmap <silent> gd <Plug>(coc-definition)
+" GoTo code navigation, and <C-o> can go back
+nmap <silent> <C-]> <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+" codeium
+" =======
+
+let g:codeium_disable_bindings = 1
+
+" imap <script><silent><nowait><expr> <C-g> codeium#Accept()
+imap <script><silent><nowait><expr> <C-g> codeium#Accept()
+imap <C-;>   <Cmd>call codeium#CycleCompletions(1)<CR>
+imap <C-,>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+imap <C-x>   <Cmd>call codeium#Clear()<CR>
 
 " Key Mapping
 " ===========
@@ -331,6 +396,7 @@ map <C-j> <C-W>j
 map <C-h> <C-W>h
 map <C-k> <C-W>k
 map <C-l> <C-W>l
+map <C-t> <C-o>
 map 0 ^
 map <C-n> :NERDTreeToggle<CR>
-map <C-i> :GoDecls<CR>
+" map <C-i> :GoDecls<CR>
