@@ -120,7 +120,7 @@ Plug 'acarapetis/vim-colors-github'
 Plug 'rakr/vim-one'
 
 " go 主要插件
-" Plug 'fatih/vim-go', { 'tag': '*' }
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 
 " go 中的代码追踪，输入 gd 就可以自动跳转
 "Plug 'dgryski/vim-godef'
@@ -209,7 +209,7 @@ let g:tagbar_type_go = {
 
 let g:rust_use_custom_ctags_defs = 1
 let g:tagbar_type_rust = {
-  \ 'ctagsbin' : '/usr/local/bin/ctags',
+  \ 'ctagsbin' : '/opt/homebrew/bin/ctags',
   \ 'ctagstype' : 'rust',
   \ 'kinds' : [
       \ 'n:modules',
@@ -242,14 +242,6 @@ let g:tagbar_type_rust = {
   \ },
 \ }
 
-" youCompleteMe
-" =============
-
-" make YCM compatible with UltiSnips (using supertab)
-"let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
-"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-"let g:SuperTabDefaultCompletionType = '<C-n>'
-
 " better key bindings for UltiSnipsExpandTrigger
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
@@ -270,7 +262,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Unknown"   : "?"
     \ }
 
-let g:NERDTreeGitStatusShowIgnored = 1
+let g:NERDTreeGitStatusShowIgnored=0
 
 " 显示行号
 let NERDTreeShowLineNumbers=1
@@ -292,7 +284,7 @@ let g:nerdtree_tabs_open_on_console_startup=1
 " let g:go_test_timeout = '3600s'
 
 " same identifiers highlight
-" let g:go_auto_sameids = 1
+"let g:go_auto_sameids=1
 
 " ALE
 " ===
@@ -379,6 +371,10 @@ nmap <leader>rn <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
+" vim-go
+" ======
+let g:go_fmt_command = "goimports"
+
 " codeium
 " =======
 
@@ -399,4 +395,4 @@ map <C-l> <C-W>l
 map <C-t> <C-o>
 map 0 ^
 map <C-n> :NERDTreeToggle<CR>
-" map <C-i> :GoDecls<CR>
+map <C-i> :GoDecls<CR>
