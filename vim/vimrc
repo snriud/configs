@@ -395,4 +395,6 @@ map <C-l> <C-W>l
 map <C-t> <C-o>
 map 0 ^
 map <C-n> :NERDTreeToggle<CR>
-map <C-i> :GoDecls<CR>
+" map <C-i> :GoDecls<CR>
+map <C-i> :CocList outline<CR>
+map <C-o> :CocList symbols<CR>
