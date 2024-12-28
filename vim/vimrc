@@ -56,6 +56,10 @@ set showcmd
 set so=8            " When scroll line, keep 7 lines
 set cmdheight=1
 
+" fzf
+" ===
+set rtp+=/opt/homebrew/opt/fzf
+
 " Color and Syntax
 " ================
 syntax enable
@@ -397,4 +401,4 @@ map 0 ^
 map <C-n> :NERDTreeToggle<CR>
 " map <C-i> :GoDecls<CR>
 map <C-i> :CocList outline<CR>
-map <C-o> :CocList symbols<CR>
+" map <C-o> :CocList symbols<CR>
